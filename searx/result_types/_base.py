@@ -35,6 +35,12 @@ WHITESPACE_REGEX = re.compile('( |\t|\n)+', re.M | re.U)
 UNKNOWN = object()
 
 
+def _is_email_address(url: str) -> bool:
+    """Return True when *url* is a bare email address (no scheme, no netloc)."""
+    parsed = urllib.parse.urlparse(url)
+    return not parsed.scheme and not parsed.netloc and '@' in parsed.path
+
+
 def _normalize_url_fields(result: "Result | LegacyResult"):
 
     # As soon we need LegacyResult not any longer, we can move this function to
@@ -45,6 +51,14 @@ def _normalize_url_fields(result: "Result | LegacyResult"):
             log.debug('result: invalid URL: %s', str(result))
             result.url = ""
             result.parsed_url = None
+        elif _is_email_address(result.url):
+            # A bare email address (e.g. "user@example.com") must not be
+            # treated as an HTTP URL – doing so produces the malformed string
+            # "http:user@example.com" (no "//"), which breaks URL hashing and
+            # deduplication across every engine.  Promote it to mailto: so the
+            # URL stays well-formed and the result can be displayed correctly.
+            result.url = "mailto:" + result.url
+            result.parsed_url = urllib.parse.urlparse(result.url)
         else:
             result.parsed_url = urllib.parse.urlparse(result.url)
 
@@ -62,10 +76,13 @@ def _normalize_url_fields(result: "Result | LegacyResult"):
 
         infobox_urls: list[dict[str, str]] = getattr(result, "urls", [])
         for item in infobox_urls:
-            _url = item.get("url")
-            if not _url:
+            _url_str = item.get("url")
+            if not _url_str:
                 continue
-            _url = urllib.parse.urlparse(_url)
+            if _is_email_address(_url_str):
+                item["url"] = "mailto:" + _url_str
+                continue
+            _url = urllib.parse.urlparse(_url_str)
             item["url"] = _url._replace(
                 scheme=_url.scheme or "http",
                 # netloc=_url.netloc.replace("www.", ""),
@@ -74,12 +91,15 @@ def _normalize_url_fields(result: "Result | LegacyResult"):
 
         infobox_id: str | None = getattr(result, "id", None)
         if infobox_id:
-            _url = urllib.parse.urlparse(infobox_id)
-            result.id = _url._replace(
-                scheme=_url.scheme or "http",
-                # netloc=_url.netloc.replace("www.", ""),
-                path=_url.path,
-            ).geturl()
+            if _is_email_address(infobox_id):
+                result.id = "mailto:" + infobox_id
+            else:
+                _url = urllib.parse.urlparse(infobox_id)
+                result.id = _url._replace(
+                    scheme=_url.scheme or "http",
+                    # netloc=_url.netloc.replace("www.", ""),
+                    path=_url.path,
+                ).geturl()
 
 
 def _normalize_text_fields(result: "MainResult | LegacyResult"):
