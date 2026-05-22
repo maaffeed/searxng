@@ -286,4 +286,80 @@ window.ELECTRICAL = {
   Intrinsic-safety barriers (Pepperl+Fuchs KFD2, MTL 5000 series) protect every field signal entering
   the safe area cabinet. Each loop has its own galvanic isolator and HART pass-through for diagnostics.
   `,
+
+  enclosures: {
+    title: "Hazardous-Area Enclosures &amp; Junction Boxes",
+    intro: `Every field sensor, switch, pushbutton, solenoid and terminal block sitting on a
+    diesel-driven oil &amp; gas pump skid is housed in an enclosure certified for the local
+    hazardous area. The two dominant protection concepts used together on Detroit / Guinard /
+    Transfluid skids are <b>Ex d</b> (flameproof — contains any internal explosion) for switching
+    and motor circuits, and <b>Ex e</b> / <b>Ex ia</b> for terminal and signal compartments.
+    The plate uploaded on site (M.A.M. GUB 2.5 AP) is a classic example of a combined
+    Ex d / Ex d[ia] enclosure used as the on-skid marshalling box.`,
+    vendors: [
+      {
+        brand: "M.A.M. Italy",
+        location: "Fizzonasco (MI), Italy — mamitaly.it",
+        product: "GUB-series flameproof enclosures &amp; control stations",
+        markings: "II 2 GD EEx d IIC Tx · II 2(1) GD EEx d [ia] IIC Tx",
+        certs: "INERIS 04 ATEX 0055 (CE 1131), IECEx, GOST-R",
+        typicalUse: "On-skid marshalling box, ESD pushbutton station, sensor j-box, Ex d/[ia] mixed compartment",
+        sample: "GUB 2.5 AP · 250 V · 35 W · 50 Hz · −20/+60 °C ambient",
+      },
+      {
+        brand: "R. STAHL",
+        location: "Waldenburg, Germany",
+        product: "8146/5 (Ex e), 8125 (Ex d) — terminal and control stations",
+        markings: "II 2 G Ex db eb mb IIC T6 Gb",
+        certs: "ATEX, IECEx, NEC Class I Div 1",
+        typicalUse: "ESD push-buttons, selectors, local HMI for pump-skid panels",
+      },
+      {
+        brand: "Cooper Crouse-Hinds (Eaton)",
+        location: "Syracuse NY / Birr CH",
+        product: "GHG series, EJB junction boxes, EJB-X",
+        markings: "II 2 GD Ex db IIC T6, NEMA 4X",
+        certs: "ATEX, IECEx, UL/CSA, INMETRO",
+        typicalUse: "Junction box for Ex d glands on field instruments",
+      },
+      {
+        brand: "Bartec",
+        location: "Bad Mergentheim, Germany",
+        product: "07-3323 series, ORcontrol enclosures",
+        markings: "II 2 G Ex de IIC T6",
+        certs: "ATEX, IECEx",
+        typicalUse: "Local control stations, motor-starter housings",
+      },
+      {
+        brand: "Pepperl+Fuchs (Stahl)",
+        location: "Mannheim, Germany",
+        product: "GR / GHG aluminium boxes, ECOM series",
+        markings: "Ex eb / Ex tb",
+        certs: "ATEX, IECEx",
+        typicalUse: "Marshalling, IS-loop termination",
+      },
+    ],
+    selectionGuide: [
+      ["Protection method", "Ex d (flameproof) — contains internal explosion; Ex e (increased safety) — prevents arcs; Ex ia (intrinsic safety) — limits energy"],
+      ["Gas group", "IIA propane · IIB ethylene · IIC hydrogen/acetylene — choose by site gas. Detroit fuel-gas skids → IIB. H2/refinery hydrocrackers → IIC."],
+      ["Temperature class", "T1 (450 °C) → T6 (85 °C). Detroit exhaust manifolds exceed 500 °C — keep enclosures on cool side or use heat-shielded routing."],
+      ["IP rating", "Minimum IP 66 outdoor, IP 66/68 if flood-prone (e.g. wash-down on a frac skid)."],
+      ["Materials", "GRP for corrosive (sour) sites · marine-grade Al for general use · 316 SS where H₂S + chlorides combine."],
+      ["Gland selection", "Ex d brass barrier gland (CMP, Hawke 501/421) for SWA armoured cable. For IS — blue glands per IEC 60079-14."],
+      ["Earthing", "Internal + external earth bolts ≥ M8, bonded to skid earth bar (< 1 Ω to plant grid)."],
+    ],
+    famousFor: `Italian and German Ex d enclosures (M.A.M., Cortem, Stahl, Bartec) are the de-facto
+    standard on European-built skids — including Guinard pumps and Transfluid couplings — because
+    they integrate Ex d power compartments with Ex e / Ex ia signal terminals in a single ATEX-
+    certified body. INERIS (notified body 1131) is the certifying authority on French-language
+    sites — visible on most M.A.M. plates.`,
+    safetyRules: [
+      "Never open an Ex d enclosure while energised — the gap-flange protection only works closed.",
+      "Wait the stamped 'X minutes after de-energised' time — internal capacitors must discharge.",
+      "Use ONLY the certified gland type (Ex d barrier glands for SWA, never a substitute).",
+      "After re-closing, torque the cover bolts to the OEM spec (typically 25–40 N·m) in a star pattern.",
+      "Inspect the flame-path (the machined flange face) — no scratches, no paint, lightly oiled with non-curing grease.",
+      "Replace damaged O-rings with the OEM part — generic O-rings void the ATEX certificate.",
+    ],
+  },
 };

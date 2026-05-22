@@ -333,6 +333,48 @@
     </section>`;
   }
 
+  function sectionEnclosures() {
+    const E = ELECTRICAL.enclosures;
+    if (!E) return "";
+    return `
+    <section class="section" data-name="enclosures">
+      <h2>${E.title}</h2>
+      <div class="card"><p>${E.intro}</p></div>
+
+      <h3>Documented Vendors</h3>
+      <div class="grid two">
+        ${E.vendors.map((v) => `
+          <div class="sensor-card" data-search="${escapeHtml((v.brand + " " + v.product + " " + v.markings + " " + v.certs + " " + (v.sample||"")).toLowerCase())}">
+            <span class="tag">${escapeHtml(v.location)}</span>
+            <h4>${v.brand}</h4>
+            <p><b>Product:</b> ${v.product}</p>
+            <p><b>Marking:</b> ${escapeHtml(v.markings)}</p>
+            <p><b>Certs:</b> ${escapeHtml(v.certs)}</p>
+            <p><b>Typical use:</b> ${escapeHtml(v.typicalUse)}</p>
+            ${v.sample ? `<p class="meta"><b>Sample plate on site:</b> ${escapeHtml(v.sample)}</p>` : ""}
+          </div>
+        `).join("")}
+      </div>
+
+      <h3>Selection Guide</h3>
+      <div class="card">${specTable(E.selectionGuide)}</div>
+
+      <h3>Famous For</h3>
+      <div class="callout">${escapeHtml(E.famousFor)}</div>
+
+      <h3>Safety Rules (Ex d in particular)</h3>
+      <div class="card">
+        <ul class="clean">${E.safetyRules.map((r) => `<li><span class="badge err">SAFETY</span>${escapeHtml(r)}</li>`).join("")}</ul>
+      </div>
+
+      <div class="callout warn">
+        On-site reference plate transcribed: <b>M.A.M. GUB 2.5 AP</b> · INERIS 04 ATEX 0055 (CE 1131)
+        · II 2 GD EEx d IIC / II 2(1) GD EEx d [ia] IIC · 250 V · 35 W · 50 Hz · −20/+60 °C —
+        see the <b>Nameplates</b> tab for the photographed plate.
+      </div>
+    </section>`;
+  }
+
   function sectionNameplates() {
     return `
     <section class="section" data-name="nameplates">
@@ -351,11 +393,28 @@
       </div>
 
       <label for="npFile" class="nameplate-drop" id="npDrop">
-        <div>📷 &nbsp; Drag photos here, or click to choose images</div>
+        <div>Drag photos here, or click to choose images</div>
         <div style="font-size: 0.8rem; margin-top: 0.4rem;">JPEG / PNG / WebP up to ~4 MB each</div>
       </label>
       <input id="npFile" type="file" accept="image/*" multiple hidden />
 
+      <h3>Catalogued On-Site Plates</h3>
+      <div class="nameplate-gallery">
+        <div class="np-thumb" data-search="mam gub ineris atex eex d iic 250 v 35 w 50 hz fizzonasco italy enclosure">
+          <img src="assets/nameplates/mam-gub25ap.jpg" alt="M.A.M. GUB 2.5 AP nameplate" />
+          <div class="np-meta">
+            <b>M.A.M. GUB 2.5 AP</b><br/>
+            <span style="font-family: var(--mono); font-size: 0.78rem; color: var(--muted);">
+              INERIS 04 ATEX 0055 · CE 1131<br/>
+              II 2 GD EEx d IIC · II 2(1) GD EEx d [ia] IIC<br/>
+              S/N 145C · Year 2001 · 250 V · 35 W · 50 Hz<br/>
+              Tamb −20/+60 °C · Fizzonasco MI · mamitaly.it
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <h3>Your Uploaded Plates</h3>
       <div class="nameplate-gallery" id="npGallery"></div>
 
       <h3>What to look for on each plate</h3>
@@ -428,6 +487,7 @@
       sectionTransfluid() +
       sectionGearbox() +
       sectionElectrical() +
+      sectionEnclosures() +
       sectionSchematic() +
       sectionNameplates() +
       sectionChecklist();
