@@ -115,6 +115,19 @@
 
   function sectionGuinard() {
     const g = AUXILIARY.guinard;
+    const seriesBlock = g.seriesGuide
+      ? `<h3>Guinard Pump Series Guide</h3><div class="card">${specTable(g.seriesGuide)}</div>`
+      : "";
+    const onSiteBlock = (g.onSitePlates || []).map((p) => `
+      <div class="card">
+        <h4>${escapeHtml(p.title)}</h4>
+        <div class="grid two">
+          <div><img src="${escapeHtml(p.img)}" alt="${escapeHtml(p.title)}"
+               style="width:100%;border-radius:8px;border:1px solid var(--border);" /></div>
+          <div>${specTable(p.rows)}</div>
+        </div>
+      </div>
+    `).join("");
     return `
     <section class="section" data-name="guinard">
       <h2>${escapeHtml(g.title)}</h2>
@@ -122,6 +135,7 @@
       <div class="card"><p>${escapeHtml(g.intro)}</p></div>
       <h3>Typical Construction &amp; Ratings</h3>
       <div class="card">${specTable(g.typical)}</div>
+      ${seriesBlock}
       <h3>Electrical Protection on Guinard Skids</h3>
       <div class="card">
         <ul class="clean">${g.electricalProtection.map((i) => `<li>${escapeHtml(i)}</li>`).join("")}</ul>
@@ -130,6 +144,7 @@
       <div class="callout">${escapeHtml(g.famousFor)}</div>
       <h3>Reading the Nameplate</h3>
       <div class="callout info">${escapeHtml(g.nameplateHints)}</div>
+      ${onSiteBlock ? `<h3>On-Site Plates (transcribed)</h3>${onSiteBlock}` : ""}
     </section>`;
   }
 
@@ -162,6 +177,10 @@
 
   function sectionGearbox() {
     const g = AUXILIARY.gearbox;
+    const siteBlock = g.siteExample
+      ? `<h3>${escapeHtml(g.siteExample.title)}</h3>
+         <div class="card">${specTable(g.siteExample.rows)}</div>`
+      : "";
     return `
     <section class="section" data-name="gearbox">
       <h2>${escapeHtml(g.title)}</h2>
@@ -175,6 +194,7 @@
       <div class="callout">${escapeHtml(g.famousFor)}</div>
       <h3>Reading the Nameplate</h3>
       <div class="callout info">${escapeHtml(g.nameplateHints)}</div>
+      ${siteBlock}
     </section>`;
   }
 
@@ -409,6 +429,34 @@
               II 2 GD EEx d IIC · II 2(1) GD EEx d [ia] IIC<br/>
               S/N 145C · Year 2001 · 250 V · 35 W · 50 Hz<br/>
               Tamb −20/+60 °C · Fizzonasco MI · mamitaly.it
+            </span>
+          </div>
+        </div>
+
+        <div class="np-thumb" data-search="pompes guinard annecy france dvmx 3x4x9 145 m3h 650 m 4000 rpm 467537 1994 pn203 condensate hydrocarbon multistage bb5">
+          <img src="assets/nameplates/guinard-dvmx-467537.jpg" alt="Guinard DVMX nameplate" />
+          <div class="np-meta">
+            <b>Pompes Guinard DVMX 3×4×9</b><br/>
+            <span style="font-family: var(--mono); font-size: 0.78rem; color: var(--muted);">
+              Annecy · France · 1994<br/>
+              S/N 467 537 · Tag PN 203<br/>
+              145 m³/h · 650 m TDH · 4000 RPM<br/>
+              Hydro 190 bar · SG 0.84 · 38 °C<br/>
+              Brg 7215 / 7312 · ≈ 300 kW shaft
+            </span>
+          </div>
+        </div>
+
+        <div class="np-thumb" data-search="roplan john crane mechanical seal cartridge api 682 plan 11 23 sweden smiths">
+          <img src="assets/nameplates/roplan-johncrane-seal.jpg" alt="Roplan / John Crane seal label" />
+          <div class="np-meta">
+            <b>Roplan · John Crane seal</b><br/>
+            <span style="font-family: var(--mono); font-size: 0.78rem; color: var(--muted);">
+              Cartridge pusher mech seal<br/>
+              Code: F1 0793… (build stamp)<br/>
+              Roplan AB (Sweden) → John Crane / Smiths<br/>
+              Likely API 682 Plan 11/23<br/>
+              SiC / Carbon faces · FKM elast.
             </span>
           </div>
         </div>
